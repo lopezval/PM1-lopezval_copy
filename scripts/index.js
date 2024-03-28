@@ -30,8 +30,10 @@ class Repository{
         this.activities.push(activity)
     }
     deleteActivity(id){
-        const filteredActivities = this.activities.filter((activities) => activities.id !== id);
-        this.activities = filteredActivities;        
+        this.activities = this.activities.filter(activity => activity.id !== id);
+        //codigo errado borraba toda la matris y no solo un indice parece que por error en el nombre de la variable.
+       // const filteredActivities = this.activities.filter((activities) => activities.id !== id);
+        //this.activities = this.filteredActivities;        
     }
 }
 
@@ -45,10 +47,10 @@ function transformToHtml(activity){
     //Extraer sus propiedades en variables utilizando destructuring.
     const {id, title, description, imgUrl} = activity
     //Crear los elementos HTML que formarán parte de la tarjeta. Ej: <h3> para el título, <p> para la descripción, <img> para la imagen.
-    const id_html = document.createElement("p")
     const title_html = document.createElement("h3");
     const description_html = document.createElement("p");
     const img_html = document.createElement("img");
+    const button_delete = document.createElement("button")
 
     /* Asignar los valores a las propiedades correspondientes a cada uno de los elementos. Ej: a la propiedad innerHTML del elemento del título, asignar el valor correspondiente. A la propiedad src del elemento de la imagen, asignar el valor correspondiente. */
     
@@ -57,22 +59,25 @@ function transformToHtml(activity){
     description_html.innerHTML = description; 
     //agregando al  atributo src url dada por el usuario en el formulario.
     img_html.src = imgUrl;
-    //ocultar etiqueta id_html agregando atributo hidden.
-    id_html.hidden = true;
+    //preparendo boton de borrado con id .
+    button_delete.id = id;
+    button_delete.innerHTML = "Borrar❌";
+
 
     //Agregar a los elementos las clases CSS correspondientes que hayas implementado para darles estilos.
     title_html.classList.add("cardTitle");
     description_html.classList.add("cardDescription");
     img_html.classList.add("cardImg");
+    button_delete.classList.add("buttonDelete");
 
     //Crear un elemento <div> que será la tarjeta donde incluiremos todos los demás elementos.
     const cardDiv = document.createElement("div");
 
     //“Appendear” al nuevo <div> los elementos creados anteriormente .
-    cardDiv.appendChild(id_html);
     cardDiv.appendChild(title_html);
     cardDiv.appendChild(img_html);
     cardDiv.appendChild(description_html);
+    cardDiv.appendChild(button_delete);
     
 
     //Asignar al <div> la clase CSS que tengas implementada para darle estilos.
@@ -118,11 +123,34 @@ if(!tituloValue || !descripcionValue || !urlimgValue){
 myRepo.createActivity(tituloValue, descripcionValue, urlimgValue);
 //Invocar la función transformToActivities() para “refrescar” el contenedor de actividades.
 transformToActivities();
+//vaciar campos de texto para dejarlos dlistos para la siguiete actividad
+document.getElementById("titulo").value = "";
+document.getElementById("descripcion").value = "";
+document.getElementById("urlimg").value = "";
+console.log(myRepo);
 }
 //Seleccionar el botón que disparará el evento de agregar actividad.
-const button = document.getElementById("botonActividad");
+const buttonAct = document.getElementById("botonActividad");
 //Agregar un Event Listener, el evento, al dispararse, ejecuta la función handlerActivity().
-button.addEventListener("click",handlerActivity);
+buttonAct.addEventListener("click",handlerActivity);
+
+//Implementar la función que se ejecutará al disparar el evento del botón borrar utilizando delegacion de eventos.
+const container_act = document.getElementById("contaner_activities");
+container_act.addEventListener('click',(event)=>{
+    if(event.target.nodeName === "BUTTON"){
+        const dataId = event.target.id;
+        myRepo.deleteActivity(Number(dataId));
+        transformToActivities();  
+    }
+    
+});
+
+
+
+
+
+
+
 
 
 
