@@ -180,11 +180,13 @@ footer{
     margin-top: 20px;
     border-radius: 7px;    
     box-sizing: border-box;
-    display: flex;
+    /*display: flex;
     flex-direction: row;
     justify-content: space-between;    
     overflow: auto;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;*/
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 .cardDiv{
     border: 1px;
@@ -223,3 +225,14 @@ footer{
     
 }
 /*fin estilos cards atividades*/
+
+.test{
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(
+            150px,
+            1fr
+        )
+    );
+}
